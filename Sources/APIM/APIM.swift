@@ -15,11 +15,11 @@ protocol APIMOutPutHandlerProtocol {
     func getqueryParameter() -> [String: String]?
 }
 
-class APIM<R: RequestProtocol, T: Decodable>: NSObject {
+open class APIM<R: RequestProtocol, T: Decodable>: NSObject {
     /*!
      @discusssion This enum is responsible for Https method type
      */
-    enum HttpMethod: String {
+   open  enum HttpMethod: String {
         case Post = "POST"
         case Get = "GET"
         case Delete = "DELETE"
@@ -93,7 +93,7 @@ class APIM<R: RequestProtocol, T: Decodable>: NSObject {
      @param   queryParameter is Dictonary type which is added in https url
      @discussion this method is responsible for set APM different attribute value.User should call this method if there are changes in query parameter.
      */
-    public convenience init(url: String, method: HttpMethod, queryParameter: [String: String]?) {
+   open  public convenience init(url: String, method: HttpMethod, queryParameter: [String: String]?) {
         self.init()
         configureApiInformationWithUrl(url, withHttpsMethods: method, withUpdateHeaders: nil, withNewHeaders: jsonHeaders, withQueryParameter: queryParameter, withRequestInfo: nil)
     }
@@ -105,7 +105,7 @@ class APIM<R: RequestProtocol, T: Decodable>: NSObject {
      @param   request is generic type which is added request dody in each https request
      @discussion this method is responsible for set APM different attribute value.User should call this method if there are changes in request value.
      */
-    public convenience init(url: String, method: HttpMethod, request: R?) {
+   open  public convenience init(url: String, method: HttpMethod, request: R?) {
         self.init()
         configureApiInformationWithUrl(url, withHttpsMethods: method, withUpdateHeaders: nil, withNewHeaders: jsonHeaders, withQueryParameter: nil, withRequestInfo: request)
     }
@@ -118,7 +118,7 @@ class APIM<R: RequestProtocol, T: Decodable>: NSObject {
      @param   updateHeaders is Dictonary type which is added json header for extra header parameter.
      @discussion this method is responsible for set APM different attribute value.User should call this method if there are changes in request value and some hedaer parameter changes.
      */
-    public convenience init(url: String, method: HttpMethod, request: R?, updateHeaders: [String: String]) {
+   open public convenience init(url: String, method: HttpMethod, request: R?, updateHeaders: [String: String]) {
         self.init()
         configureApiInformationWithUrl(url, withHttpsMethods: method, withUpdateHeaders: updateHeaders, withNewHeaders: jsonHeaders, withQueryParameter: nil, withRequestInfo: request)
     }
@@ -131,7 +131,7 @@ class APIM<R: RequestProtocol, T: Decodable>: NSObject {
      @param   queryParameter is Dictonary type which is added in https url
      @discussion this method is responsible for set APM different attribute value.User should call this method if there are changes in request value and query parameter.
      */
-    public convenience init(url: String, method: HttpMethod, request: R?, queryParameter: [String: String]) {
+   open public convenience init(url: String, method: HttpMethod, request: R?, queryParameter: [String: String]) {
         self.init()
         configureApiInformationWithUrl(url, withHttpsMethods: method, withUpdateHeaders: nil, withNewHeaders: jsonHeaders, withQueryParameter: queryParameter, withRequestInfo: request)
     }
@@ -180,16 +180,11 @@ class APIM<R: RequestProtocol, T: Decodable>: NSObject {
      @param  completion is closure which is responsible for set default closure value.
      @discussion  This method is reponsible for extecute api call.
      */
-    public func executeApi(completion: @escaping (_ sender: APIM, _ response: ResponseResult<T>) -> Void) {
+   open public func executeApi(completion: @escaping (_ sender: APIM, _ response: ResponseResult<T>) -> Void) {
         _completion = completion
         print("SEND time:", Date())
-        #if MOCK
-            let networkHandler: WebserviceAcessProtocol = NetWorkHandler()
-            networkHandler.executeRestMOCKAPI(url: _urlString, httpMethod: _method.rawValue, requestHeaders: _headers, postBody: _requestBody, withQueryParameter: _queryParameter, withCompletionHandler: processMockResponseResult)
-        #else
             let networkHandler: WebserviceAcessProtocol = NetWorkHandler()
             networkHandler.executeRestAPI(url: _urlString, httpMethod: _method.rawValue, requestHeaders: _headers, postBody: _requestBody, withQueryParameter: _queryParameter, withCompletionHandler: processHttpsResponseResult)
-        #endif
     }
 
     /*!

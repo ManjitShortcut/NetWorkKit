@@ -6,7 +6,7 @@
 //  Copyright © 2019 Umoe. All rights reserved.
 //
 
-struct ErrorResponseResult: Decodable {
+public struct ErrorResponseResult: Decodable {
     fileprivate var code: String?
     fileprivate var errorMessage: String?
     enum CodingKeys: String, CodingKey {
@@ -24,11 +24,11 @@ struct ErrorResponseResult: Decodable {
         }
     }
 
-    func fetchErrorCode() -> String {
+   public func fetchErrorCode() -> String {
         return ""
     }
 
-    func fetchErrorMessage() -> String {
+   public func fetchErrorMessage() -> String {
         return ""
     }
 }

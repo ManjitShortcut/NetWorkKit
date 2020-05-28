@@ -12,7 +12,7 @@ import Foundation
  @protocol ResponseResult
  @discussion This protocol is reponsible for fetch reponse result if the webservice response is succuess other wise fail response status
  */
-protocol ResponseResultOutPutProtocol {
+open protocol ResponseResultOutPutProtocol {
     func getResponseResult<T>() -> T?
     func isResponseResultSuccess() -> Bool
     func getWebServiceResponseStatus() -> WebServiceResponseStatus
@@ -22,7 +22,7 @@ protocol ResponseResultOutPutProtocol {
  @enum WebServiceResponseStatus
  @discussion This enum is reponsible for Webservice result status
  */
-enum WebServiceResponseStatus {
+open enum WebServiceResponseStatus {
     case WebServiceResponseStatus_Success // success staus if webservice result is success and connection is success
     case WebserviceResponseStatus_Failure(errorMessage: String) // failure status and message if theire are some othe errors.
     case WebserviceResponseStatus_NoInternet(errorMessage: String) // failure status and internet not available message if there is no internet available
@@ -35,7 +35,7 @@ enum WebServiceResponseStatus {
   ErrorResponseResult is responsible error result incase
  */
 
-struct ResponseResult<T> {
+open struct ResponseResult<T> {
     fileprivate let result: T? // parsing result it is generic type.
     fileprivate let errorResult: ErrorResponseResult? // error result for id someting happen
     fileprivate let httpsStatusCode: Int?
@@ -76,7 +76,7 @@ extension ResponseResult: ResponseResultOutPutProtocol {
      @result    boolen value true or false depening upon result
      @discussion this method is check web service connection and parsing object is success or not. if suucess the return true other wise return false.
      */
-    func isResponseResultSuccess() -> Bool {
+   open func isResponseResultSuccess() -> Bool {
         switch getWebServiceResponseStatus() {
         case .WebServiceResponseStatus_Success:
             return true
@@ -90,7 +90,7 @@ extension ResponseResult: ResponseResultOutPutProtocol {
      @result    boolen value true or false depening upon connection type
      @discussion this method is check https status and parser object if it is succes the return success other wise return false.
      */
-    fileprivate func isConnectionSuccess() -> Bool {
+   open fileprivate func isConnectionSuccess() -> Bool {
         if isHttpsSuccess(), let _ = self.result {
             return true
         }
@@ -102,7 +102,7 @@ extension ResponseResult: ResponseResultOutPutProtocol {
      @result    T value which is generic type, Because this resuklt class dont know which parserobject it keep at the time of parsing.
      @discussion this method is responsible for provide the response result.
      */
-    func getResponseResult<T>() -> T? {
+   open func getResponseResult<T>() -> T? {
         return result as? T
     }
 
@@ -112,7 +112,7 @@ extension ResponseResult: ResponseResultOutPutProtocol {
      @discussion this method is responsible for check webservice responce  if it fail then pass the message why it is failing .It failing due to internet coonection or due to request error or due to internal server error
 
      */
-    func getWebServiceResponseStatus() -> WebServiceResponseStatus {
+    open func getWebServiceResponseStatus() -> WebServiceResponseStatus {
         if isHttpsSuccess() {
             if result != nil {
                 return WebServiceResponseStatus.WebServiceResponseStatus_Success
