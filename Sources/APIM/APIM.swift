@@ -15,11 +15,11 @@ protocol APIMOutPutHandlerProtocol {
     func getqueryParameter() -> [String: String]?
 }
 
-open class APIM<R: RequestProtocol, T: Decodable>: NSObject {
+public class APIM<R: RequestProtocol, T: Decodable>: NSObject {
     /*!
      @discusssion This enum is responsible for Https method type
      */
-   open  enum HttpMethod: String {
+   public  enum HttpMethod: String {
         case Post = "POST"
         case Get = "GET"
         case Delete = "DELETE"
